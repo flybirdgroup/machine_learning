@@ -5,7 +5,7 @@ from py2neo import Graph
 
 class AnswerSearching:
     def __init__(self):
-        self.graph = Graph("http://localhost:7474", username="neo4j", password="123456789")
+        self.graph = Graph("bolt://localhost:7687", auth=("neo4j", "123456"))
         self.top_num = 10
 
     def question_parser(self, data):

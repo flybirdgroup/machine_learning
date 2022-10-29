@@ -10,7 +10,7 @@ class MedicalGraph:
     def __init__(self):
         cur_dir = '/'.join(os.path.abspath(__file__).split('/')[:-1])
         self.data_path = os.path.join(cur_dir, 'DATA/new_joiner.csv')
-        self.graph = Graph("http://localhost:7474", auth=("neo4j", "123456"))
+        self.graph = Graph("bolt://localhost:7687", auth=("neo4j", "123456"))
 
     def read_file(self):
         """
@@ -80,6 +80,8 @@ class MedicalGraph:
             gender = str(data[7]).strip() if str(data[7]) else "unknown"
             new_joiner_dict["gender"] = gender
 
+
+
             new_joiners_infos.append(new_joiner_dict)
 
         return set(new_joiners), set(educations), set(locations), set(hobbies), set(departments), set(skillsets), \
@@ -95,7 +97,7 @@ class MedicalGraph:
         """
         count = 0
         for node_name in nodes:
-            node = Node(label, name=node_name)
+            node = Node(label, name=node_name, type=label)
             self.graph.create(node)
             count += 1
             print(count, len(nodes))
@@ -110,7 +112,7 @@ class MedicalGraph:
         count = 0
         for new_joiner_dict in new_joiner_info:
             node = Node("new_joiner", name=new_joiner_dict['name'], age=new_joiner_dict['age'],
-                        gender=new_joiner_dict['gender'])
+                        gender=new_joiner_dict['gender'],type="new_joiner")
             self.graph.create(node)
             count += 1
             print(count)
@@ -171,6 +173,10 @@ class MedicalGraph:
             except Exception as e:
                 print(e)
         return
+
+    def get_graph_object(self):
+        return self.graph
+
 
 
 if __name__ == "__main__":
